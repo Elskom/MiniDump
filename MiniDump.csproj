@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net452;net462;net47;net472</TargetFrameworks>
+		<TargetFramework>net472</TargetFramework>
 		<AssemblyName>MiniDump</AssemblyName>
 		<LangVersion>latest</LangVersion>
 		<Company>Els_kom org.</Company>
