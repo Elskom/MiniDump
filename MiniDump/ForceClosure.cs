@@ -14,11 +14,11 @@ namespace Elskom.Generic.Libs
     /// dump was created by this library
     /// and we do not want the system itself
     /// to produce a second one.
-    ///</summary>
+    /// </summary>
     public static class ForceClosure
     {
         /// <summary>
-        /// Gets if the application should force close.
+        /// Gets a value indicating whether the application should force close.
         /// </summary>
         public static bool ForceClose { get; internal set; } = false;
     }
