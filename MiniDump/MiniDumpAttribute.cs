@@ -58,7 +58,7 @@ namespace Elskom.Generic.Libs
             // do not dump or close if in a debugger.
             if (!Debugger.IsAttached)
             {
-                // MainControl.Closable = true;
+                ForceClosure.ForceClose = true;
                 var fileStream = File.OpenWrite(SettingsFile.ErrorLogPath);
                 fileStream.Write(outputData, 0, outputData.Length);
                 fileStream.Dispose();
@@ -77,7 +77,7 @@ namespace Elskom.Generic.Libs
             // do not dump or close if in a debugger.
             if (!Debugger.IsAttached)
             {
-                // MainControl.Closable = true;
+                ForceClosure.ForceClose = true;
                 var fileStream = File.OpenWrite(SettingsFile.ErrorLogPath);
                 fileStream.Write(outputData, 0, outputData.Length);
                 fileStream.Dispose();

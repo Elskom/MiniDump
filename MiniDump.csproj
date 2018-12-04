@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>net472</TargetFramework>
@@ -13,8 +13,8 @@
 		<PackageLicenseUrl>https://github.com/Elskom/MiniDump/blob/master/LICENSE</PackageLicenseUrl>
 		<Copyright>Copyright (c) 2018</Copyright>
 		<Description>A c# library that handles mini-dumping a program by adding the "[MiniDump(...)]" attribute to the application's main class.</Description>
-		<PackageReleaseNotes>Initial release.</PackageReleaseNotes>
-		<Version>1.0.0</Version>
+		<PackageReleaseNotes>Allow the target application to force close.</PackageReleaseNotes>
+		<Version>1.0.1</Version>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 	</PropertyGroup>
 

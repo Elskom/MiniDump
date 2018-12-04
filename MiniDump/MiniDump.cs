@@ -10,9 +10,6 @@ namespace Elskom.Generic.Libs
     using System.IO;
     using System.Runtime.InteropServices;
 
-    /// <summary>
-    /// Class in the Core that allows creating Mini-dumps when a fatal exception occurs.
-    /// </summary>
     internal static class MiniDump
     {
         /// <summary>
