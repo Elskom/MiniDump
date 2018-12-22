@@ -52,7 +52,7 @@
 		</PackageReference>
 		<Reference Include="System.Windows.Forms" />
 		<PackageReference Include="MessageManager">
-		    <Version>1.1.0</Version>
+		    <Version>1.1.1</Version>
         </PackageReference>
         <PackageReference Include="SettingsFile">
             <Version>1.0.2</Version>
