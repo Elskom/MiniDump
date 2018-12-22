@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
 	<PropertyGroup>
-		<TargetFramework>netcoreapp3.0;net472</TargetFramework>
+		<TargetFrameworks>netcoreapp3.0;net472</TargetFrameworks>
 		<AssemblyName>MiniDump</AssemblyName>
 		<LangVersion>latest</LangVersion>
 		<Company>Els_kom org.</Company>
