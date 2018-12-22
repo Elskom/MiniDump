@@ -1,7 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
 	<PropertyGroup>
-		<TargetFramework>net472</TargetFramework>
+		<TargetFramework>netcoreapp3.0;net472</TargetFramework>
 		<AssemblyName>MiniDump</AssemblyName>
 		<LangVersion>latest</LangVersion>
 		<Company>Els_kom org.</Company>
@@ -13,8 +13,8 @@
 		<PackageLicenseUrl>https://github.com/Elskom/MiniDump/blob/master/LICENSE</PackageLicenseUrl>
 		<Copyright>Copyright (c) 2018</Copyright>
 		<Description>A c# library that handles mini-dumping a program by adding the "[MiniDump(...)]" attribute to the application's main class.</Description>
-		<PackageReleaseNotes>Allow the target application to force close.</PackageReleaseNotes>
-		<Version>1.0.1</Version>
+		<PackageReleaseNotes>Added .NET Core 3.0 to target frameworks.</PackageReleaseNotes>
+		<Version>1.0.2</Version>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 	</PropertyGroup>
 
@@ -50,7 +50,7 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
 		</PackageReference>
-		<Reference Include="System.Windows.Forms" />
+		<Reference Include="System.Windows.Forms" Condition="'$(TargetFramework)' != 'netcoreapp3.0'" />
 		<PackageReference Include="MessageManager">
 		    <Version>1.1.1</Version>
         </PackageReference>
