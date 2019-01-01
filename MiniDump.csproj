@@ -11,7 +11,7 @@
 		<RepositoryUrl>https://github.com/Elskom/MiniDump/</RepositoryUrl>
 		<PackageProjectUrl>https://github.com/Elskom/MiniDump/</PackageProjectUrl>
 		<PackageLicenseUrl>https://github.com/Elskom/MiniDump/blob/master/LICENSE</PackageLicenseUrl>
-		<Copyright>Copyright (c) 2018</Copyright>
+		<Copyright>Copyright (c) 2018-2019</Copyright>
 		<Description>A c# library that handles mini-dumping a program by adding the "[MiniDump(...)]" attribute to the application's main class.</Description>
 		<PackageReleaseNotes>Added .NET Core 3.0 to target frameworks.</PackageReleaseNotes>
 		<Version>1.0.2</Version>
