@@ -59,9 +59,11 @@ namespace Elskom.Generic.Libs
             if (!Debugger.IsAttached)
             {
                 ForceClosure.ForceClose = true;
-                var fileStream = File.OpenWrite(SettingsFile.ErrorLogPath);
+                using (var fileStream = File.OpenWrite(SettingsFile.ErrorLogPath))
+                {
                 fileStream.Write(outputData, 0, outputData.Length);
-                fileStream.Dispose();
+                }
+
                 MiniDump.FullMiniDumpToFile(SettingsFile.MiniDumpPath);
                 MessageManager.ShowError(string.Format(this.text, SettingsFile.ErrorLogPath), this.ExceptionTitle, Convert.ToBoolean(Convert.ToInt32(SettingsFile.Settingsxml?.TryRead("UseNotifications") != string.Empty ? SettingsFile.Settingsxml?.TryRead("UseNotifications") : "0")));
                 Application.Exit();
@@ -78,9 +80,11 @@ namespace Elskom.Generic.Libs
             if (!Debugger.IsAttached)
             {
                 ForceClosure.ForceClose = true;
-                var fileStream = File.OpenWrite(SettingsFile.ErrorLogPath);
+                using (var fileStream = File.OpenWrite(SettingsFile.ErrorLogPath))
+                {
                 fileStream.Write(outputData, 0, outputData.Length);
-                fileStream.Dispose();
+                }
+
                 MiniDump.FullMiniDumpToFile(SettingsFile.MiniDumpPath);
                 MessageManager.ShowError(string.Format(this.text, SettingsFile.ErrorLogPath), this.ThreadExceptionTitle, Convert.ToBoolean(Convert.ToInt32(SettingsFile.Settingsxml?.TryRead("UseNotifications") != string.Empty ? SettingsFile.Settingsxml?.TryRead("UseNotifications") : "0")));
                 Application.Exit();

@@ -24,37 +24,32 @@ namespace Elskom.Generic.Libs
                 // file does not exist until this line, but this throws a
                 // "System.IO.IOException: The process cannot access the file
                 // '%LocalAppData%\Els_kom-[Process ID].mdmp' because it is being used by another process."
-                var fsToDump = new FileStream(
-                    fileToDump,
-                    FileMode.Create,
-                    FileAccess.ReadWrite,
-                    FileShare.Write);
-                var mINIDUMP_EXCEPTION_INFORMATION = new MINIDUMP_EXCEPTION_INFORMATION
+                using (var fsToDump = new FileStream(fileToDump, FileMode.Create, FileAccess.ReadWrite, FileShare.Write))
+                using (var thisProcess = Process.GetCurrentProcess())
                 {
-                    ClientPointers = false,
-                    ExceptionPointers = Marshal.GetExceptionPointers(),
-                    ThreadId = SafeNativeMethods.GetCurrentThreadId(),
-                };
-                var thisProcess = Process.GetCurrentProcess();
-                SafeNativeMethods.MiniDumpWriteDump(
-                    thisProcess.Handle,
-                    thisProcess.Id,
-                    fsToDump.SafeFileHandle,
-                    MINIDUMP_TYPE.Normal,
-                    ref mINIDUMP_EXCEPTION_INFORMATION,
-                    IntPtr.Zero,
-                    IntPtr.Zero);
-                var error = Marshal.GetLastWin32Error();
-                if (error > 0)
-                {
-                    MessageManager.ShowError(
-                        $"Mini-dumping failed with Code: {error}",
-                        "Error!",
-                        Convert.ToBoolean(Convert.ToInt32(SettingsFile.Settingsxml?.TryRead("UseNotifications") != string.Empty ? SettingsFile.Settingsxml?.TryRead("UseNotifications") : "0")));
+                    var mINIDUMP_EXCEPTION_INFORMATION = new MINIDUMP_EXCEPTION_INFORMATION
+                    {
+                        ClientPointers = false,
+                        ExceptionPointers = Marshal.GetExceptionPointers(),
+                        ThreadId = SafeNativeMethods.GetCurrentThreadId(),
+                    };
+                    SafeNativeMethods.MiniDumpWriteDump(
+                        thisProcess.Handle,
+                        thisProcess.Id,
+                        fsToDump.SafeFileHandle,
+                        MINIDUMP_TYPE.Normal,
+                        ref mINIDUMP_EXCEPTION_INFORMATION,
+                        IntPtr.Zero,
+                        IntPtr.Zero);
+                    var error = Marshal.GetLastWin32Error();
+                    if (error > 0)
+                    {
+                        MessageManager.ShowError(
+                            $"Mini-dumping failed with Code: {error}",
+                            "Error!",
+                            Convert.ToBoolean(Convert.ToInt32(SettingsFile.Settingsxml?.TryRead("UseNotifications") != string.Empty ? SettingsFile.Settingsxml?.TryRead("UseNotifications") : "0")));
+                    }
                 }
-
-                thisProcess.Dispose();
-                fsToDump.Dispose();
             }
         }
 
@@ -70,37 +65,33 @@ namespace Elskom.Generic.Libs
                 // file does not exist until this line, but this throws a
                 // "System.IO.IOException: The process cannot access the file
                 // '%LocalAppData%\Els_kom-[Process ID].mdmp' because it is being used by another process."
-                var fsToDump = new FileStream(
-                    fileToDump,
-                    FileMode.Create,
-                    FileAccess.ReadWrite,
-                    FileShare.Write);
-                var mINIDUMP_EXCEPTION_INFORMATION = new MINIDUMP_EXCEPTION_INFORMATION
+                using (var fsToDump = new FileStream(fileToDump, FileMode.Create, FileAccess.ReadWrite, FileShare.Write))
+                using (var thisProcess = Process.GetCurrentProcess())
                 {
-                    ClientPointers = false,
-                    ExceptionPointers = Marshal.GetExceptionPointers(),
-                    ThreadId = SafeNativeMethods.GetCurrentThreadId(),
-                };
-                var thisProcess = Process.GetCurrentProcess();
-                SafeNativeMethods.MiniDumpWriteDump(
-                    thisProcess.Handle,
-                    thisProcess.Id,
-                    fsToDump.SafeFileHandle,
-                    MINIDUMP_TYPE.WithDataSegs | MINIDUMP_TYPE.WithFullMemory | MINIDUMP_TYPE.WithProcessThreadData | MINIDUMP_TYPE.WithFullMemoryInfo | MINIDUMP_TYPE.WithThreadInfo | MINIDUMP_TYPE.WithCodeSegs,
-                    ref mINIDUMP_EXCEPTION_INFORMATION,
-                    IntPtr.Zero,
-                    IntPtr.Zero);
-                var error = Marshal.GetLastWin32Error();
-                if (error > 0)
-                {
-                    MessageManager.ShowError(
-                        $"Mini-dumping failed with Code: {error}",
-                        "Error!",
-                        Convert.ToBoolean(Convert.ToInt32(SettingsFile.Settingsxml?.TryRead("UseNotifications") != string.Empty ? SettingsFile.Settingsxml?.TryRead("UseNotifications") : "0")));
-                }
+                    var mINIDUMP_EXCEPTION_INFORMATION = new MINIDUMP_EXCEPTION_INFORMATION
+                    {
+                        ClientPointers = false,
+                        ExceptionPointers = Marshal.GetExceptionPointers(),
+                        ThreadId = SafeNativeMethods.GetCurrentThreadId(),
+                    };
+                    SafeNativeMethods.MiniDumpWriteDump(
+                        thisProcess.Handle,
+                        thisProcess.Id,
+                        fsToDump.SafeFileHandle,
+                        MINIDUMP_TYPE.WithDataSegs | MINIDUMP_TYPE.WithFullMemory | MINIDUMP_TYPE.WithProcessThreadData | MINIDUMP_TYPE.WithFullMemoryInfo | MINIDUMP_TYPE.WithThreadInfo | MINIDUMP_TYPE.WithCodeSegs,
+                        ref mINIDUMP_EXCEPTION_INFORMATION,
+                        IntPtr.Zero,
+                        IntPtr.Zero);
+                    var error = Marshal.GetLastWin32Error();
+                    if (error > 0)
+                    {
+                        MessageManager.ShowError(
+                            $"Mini-dumping failed with Code: {error}",
+                            "Error!",
+                            Convert.ToBoolean(Convert.ToInt32(SettingsFile.Settingsxml?.TryRead("UseNotifications") != string.Empty ? SettingsFile.Settingsxml?.TryRead("UseNotifications") : "0")));
+                    }
 
-                thisProcess.Dispose();
-                fsToDump.Dispose();
+                }
             }
         }
     }
