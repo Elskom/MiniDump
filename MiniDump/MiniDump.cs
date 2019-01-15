@@ -90,7 +90,6 @@ namespace Elskom.Generic.Libs
                             "Error!",
                             Convert.ToBoolean(Convert.ToInt32(SettingsFile.Settingsxml?.TryRead("UseNotifications") != string.Empty ? SettingsFile.Settingsxml?.TryRead("UseNotifications") : "0")));
                     }
-
                 }
             }
         }
