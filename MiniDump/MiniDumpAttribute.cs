@@ -61,7 +61,7 @@ namespace Elskom.Generic.Libs
                 ForceClosure.ForceClose = true;
                 using (var fileStream = File.OpenWrite(SettingsFile.ErrorLogPath))
                 {
-                fileStream.Write(outputData, 0, outputData.Length);
+                    fileStream.Write(outputData, 0, outputData.Length);
                 }
 
                 MiniDump.FullMiniDumpToFile(SettingsFile.MiniDumpPath);
@@ -82,7 +82,7 @@ namespace Elskom.Generic.Libs
                 ForceClosure.ForceClose = true;
                 using (var fileStream = File.OpenWrite(SettingsFile.ErrorLogPath))
                 {
-                fileStream.Write(outputData, 0, outputData.Length);
+                    fileStream.Write(outputData, 0, outputData.Length);
                 }
 
                 MiniDump.FullMiniDumpToFile(SettingsFile.MiniDumpPath);

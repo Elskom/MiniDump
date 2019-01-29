@@ -18,8 +18,7 @@ namespace Elskom.Generic.Libs
         /// <param name="fileToDump">The file path to dump to.</param>
         internal static void MiniDumpToFile(string fileToDump)
         {
-            if (RuntimeInformation.IsOSPlatform(
-                OSPlatform.Windows))
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 // file does not exist until this line, but this throws a
                 // "System.IO.IOException: The process cannot access the file
