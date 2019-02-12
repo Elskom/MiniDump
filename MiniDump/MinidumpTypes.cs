@@ -11,7 +11,7 @@ namespace Elskom.Generic.Libs
     /// The flags for the type of mini-dumps to generate.
     /// </summary>
     [Flags]
-    internal enum MINIDUMP_TYPE
+    public enum MinidumpTypes
     {
         /// <summary>
         /// A normal mini-dump.
