@@ -108,9 +108,38 @@ namespace Elskom.Generic.Libs
         /// </summary>
         IgnoreInaccessibleMemory = 0x00020000,
 
+        // From minidumpapiset.h in the Windows 10 v10.0.17763.0 SDK.
+
+        /// <summary>
+        /// Include some sort of token information.
+        /// </summary>
+        WithTokenInformation = 0x00040000,
+
+        /// <summary>
+        /// Include module file headers.
+        /// </summary>
+        WithModuleHeaders = 0x00080000,
+
+        /// <summary>
+        /// Some sort of filter.
+        /// </summary>
+        FilterTriage = 0x00100000,
+
+        /// <summary>
+        /// Include some sort of AvxXState stuff.
+        /// </summary>
+        WithAvxXStateContext = 0x00200000,
+
+        /// <summary>
+        /// Include some sort of Ipt Trace. Maybe some sort of stack trace?
+        /// </summary>
+        WithIptTrace = 0x00400000,
+
+        // Updated from the above. Could be why mini dump fails with error code 87 sometimes?
+
         /// <summary>
         /// Include Valid types?.
         /// </summary>
-        ValidTypeFlags = 0x0003ffff,
+        ValidTypeFlags = 0x007fffff,
     }
 }

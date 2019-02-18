@@ -5,8 +5,6 @@
 
 namespace Elskom.Generic.Libs
 {
-    using System;
-
     /// <summary>
     /// A static class to let the program
     /// know that it needs to close even

@@ -13,6 +13,7 @@ namespace Elskom.Generic.Libs
     using System.Threading;
     using System.Windows.Forms;
 
+    // maybe something like this could be added to the framework.
     // do not use this attribute for anything but classes, the assembly, or the Main() method.
 
     /// <summary>
@@ -59,6 +60,16 @@ namespace Elskom.Generic.Libs
         /// </summary>
         public string ThreadExceptionTitle { get; set; }
 
+        /// <summary>
+        /// Gets or sets the mini-dump file name.
+        /// </summary>
+        public string DumpFileName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the mini-dump log file name.
+        /// </summary>
+        public string DumpLogFileName { get; set; }
+
         private void ExceptionHandler(object sender, UnhandledExceptionEventArgs args)
         {
             var e = (Exception)args.ExceptionObject;
@@ -69,13 +80,23 @@ namespace Elskom.Generic.Libs
             if (!Debugger.IsAttached)
             {
                 ForceClosure.ForceClose = true;
-                using (var fileStream = File.OpenWrite(SettingsFile.ErrorLogPath))
+                if (string.IsNullOrEmpty(this.DumpLogFileName))
+                {
+                    this.DumpLogFileName = SettingsFile.ErrorLogPath;
+                }
+
+                if (string.IsNullOrEmpty(this.DumpFileName))
+                {
+                    this.DumpFileName = SettingsFile.MiniDumpPath;
+                }
+
+                using (var fileStream = File.OpenWrite(this.DumpLogFileName))
                 {
                     fileStream.Write(outputData, 0, outputData.Length);
                 }
 
-                MiniDump.MiniDumpToFile(SettingsFile.MiniDumpPath, this.DumpType);
-                DumpGenerated?.Invoke(this, new MiniDumpEventArgs(string.Format(this.text, SettingsFile.ErrorLogPath), this.ExceptionTitle));
+                MiniDump.MiniDumpToFile(this.DumpFileName, this.DumpType);
+                DumpGenerated?.Invoke(this, new MiniDumpEventArgs(string.Format(this.text, this.DumpLogFileName), this.ExceptionTitle));
             }
         }
 
@@ -89,13 +110,23 @@ namespace Elskom.Generic.Libs
             if (!Debugger.IsAttached)
             {
                 ForceClosure.ForceClose = true;
-                using (var fileStream = File.OpenWrite(SettingsFile.ErrorLogPath))
+                if (string.IsNullOrEmpty(this.DumpLogFileName))
+                {
+                    this.DumpLogFileName = SettingsFile.ErrorLogPath;
+                }
+
+                if (string.IsNullOrEmpty(this.DumpFileName))
+                {
+                    this.DumpFileName = SettingsFile.MiniDumpPath;
+                }
+
+                using (var fileStream = File.OpenWrite(this.DumpLogFileName))
                 {
                     fileStream.Write(outputData, 0, outputData.Length);
                 }
 
-                MiniDump.MiniDumpToFile(SettingsFile.MiniDumpPath, this.DumpType);
-                DumpGenerated?.Invoke(this, new MiniDumpEventArgs(string.Format(this.text, SettingsFile.ErrorLogPath), this.ThreadExceptionTitle));
+                MiniDump.MiniDumpToFile(this.DumpFileName, this.DumpType);
+                DumpGenerated?.Invoke(this, new MiniDumpEventArgs(string.Format(this.text, this.DumpLogFileName), this.ThreadExceptionTitle));
             }
         }
     }
