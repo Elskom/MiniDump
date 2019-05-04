@@ -6,12 +6,11 @@
 namespace Elskom.Generic.Libs
 {
     using System;
-    using System.Diagnostics;
-    using System.IO;
     using System.Security.Permissions;
-    using System.Text;
+#if WITH_WINFORMS
     using System.Threading;
     using System.Windows.Forms;
+#endif
 
     // maybe something like this could be added to the framework.
     // do not use this attribute for anything but classes, the assembly, or the Main() method.
@@ -19,31 +18,45 @@ namespace Elskom.Generic.Libs
     /// <summary>
     /// Attribute for creating MiniDumps.
     ///
-    /// This registers Thread and Unhandled exception
+    /// This registers Unhandled exception and Thread exception (if availible)
     /// handlers to do it.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Assembly | AttributeTargets.Method)]
     public class MiniDumpAttribute : Attribute
     {
-        private readonly string text;
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MiniDumpAttribute"/> class.
+        /// </summary>
+        [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.ControlAppDomain)]
+        public MiniDumpAttribute()
+        {
+            var currentDomain = AppDomain.CurrentDomain;
+            currentDomain.UnhandledException += new UnhandledExceptionEventHandler(ExceptionHandler);
+#if WITH_WINFORMS
+            Application.ThreadException += new ThreadExceptionEventHandler(ThreadExceptionHandler);
+#endif
+            CurrentInstance = this;
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MiniDumpAttribute"/> class.
         /// </summary>
         /// <param name="text">Exception message text.</param>
         [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.ControlAppDomain)]
+        [Obsolete("This version of the constrictor is only here for backwards compatibility and will be removed in a future version.")]
         public MiniDumpAttribute(string text)
-        {
-            this.text = text;
-            var currentDomain = AppDomain.CurrentDomain;
-            currentDomain.UnhandledException += new UnhandledExceptionEventHandler(this.ExceptionHandler);
-            Application.ThreadException += new ThreadExceptionEventHandler(this.ThreadExceptionHandler);
-        }
+            : this()
+            => this.Text = text;
 
         /// <summary>
-        /// Occurs when a mini-dump is generated.
+        /// Gets the current instance of this attribute.
         /// </summary>
-        public static event EventHandler<MiniDumpEventArgs> DumpGenerated;
+        public static MiniDumpAttribute CurrentInstance { get; private set; }
+
+        /// <summary>
+        /// Gets or sets the Exception message text.
+        /// </summary>
+        public string Text { get; set; }
 
         /// <summary>
         /// Gets or sets the mini-dump type.
@@ -53,81 +66,29 @@ namespace Elskom.Generic.Libs
         /// <summary>
         /// Gets or sets the title of the unhandled exception messagebox.
         /// </summary>
-        public string ExceptionTitle { get; set; }
+        public string ExceptionTitle { get; set; } = "Unhandled Exception!";
 
         /// <summary>
         /// Gets or sets the title of the unhandled thread exception messagebox.
         /// </summary>
-        public string ThreadExceptionTitle { get; set; }
+        public string ThreadExceptionTitle { get; set; } = "Unhandled Thread Exception!";
 
         /// <summary>
         /// Gets or sets the mini-dump file name.
         /// </summary>
-        public string DumpFileName { get; set; }
+        public string DumpFileName { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the mini-dump log file name.
         /// </summary>
-        public string DumpLogFileName { get; set; }
+        public string DumpLogFileName { get; set; } = string.Empty;
 
-        private void ExceptionHandler(object sender, UnhandledExceptionEventArgs args)
-        {
-            var e = (Exception)args.ExceptionObject;
-            var exceptionData = $"{e.GetType()}: {e.Message}{Environment.NewLine}{e.StackTrace}{Environment.NewLine}";
-            var outputData = Encoding.ASCII.GetBytes(exceptionData);
+        private static void ExceptionHandler(object sender, UnhandledExceptionEventArgs args)
+            => MiniDump.ExceptionEventHandlerCode((Exception)args.ExceptionObject, false);
 
-            // do not dump or close if in a debugger.
-            if (!Debugger.IsAttached)
-            {
-                ForceClosure.ForceClose = true;
-                if (string.IsNullOrEmpty(this.DumpLogFileName))
-                {
-                    this.DumpLogFileName = SettingsFile.ErrorLogPath;
-                }
-
-                if (string.IsNullOrEmpty(this.DumpFileName))
-                {
-                    this.DumpFileName = SettingsFile.MiniDumpPath;
-                }
-
-                using (var fileStream = File.OpenWrite(this.DumpLogFileName))
-                {
-                    fileStream.Write(outputData, 0, outputData.Length);
-                }
-
-                MiniDump.MiniDumpToFile(this.DumpFileName, this.DumpType);
-                DumpGenerated?.Invoke(this, new MiniDumpEventArgs(string.Format(this.text, this.DumpLogFileName), this.ExceptionTitle));
-            }
-        }
-
-        private void ThreadExceptionHandler(object sender, ThreadExceptionEventArgs e)
-        {
-            var ex = e.Exception;
-            var exceptionData = $"{ex.GetType()}: {ex.Message}{Environment.NewLine}{ex.StackTrace}{Environment.NewLine}";
-            var outputData = Encoding.ASCII.GetBytes(exceptionData);
-
-            // do not dump or close if in a debugger.
-            if (!Debugger.IsAttached)
-            {
-                ForceClosure.ForceClose = true;
-                if (string.IsNullOrEmpty(this.DumpLogFileName))
-                {
-                    this.DumpLogFileName = SettingsFile.ErrorLogPath;
-                }
-
-                if (string.IsNullOrEmpty(this.DumpFileName))
-                {
-                    this.DumpFileName = SettingsFile.MiniDumpPath;
-                }
-
-                using (var fileStream = File.OpenWrite(this.DumpLogFileName))
-                {
-                    fileStream.Write(outputData, 0, outputData.Length);
-                }
-
-                MiniDump.MiniDumpToFile(this.DumpFileName, this.DumpType);
-                DumpGenerated?.Invoke(this, new MiniDumpEventArgs(string.Format(this.text, this.DumpLogFileName), this.ThreadExceptionTitle));
-            }
-        }
+#if WITH_WINFORMS
+        private static void ThreadExceptionHandler(object sender, ThreadExceptionEventArgs e)
+            => MiniDump.ExceptionEventHandlerCode(e.Exception, true);
+#endif
     }
 }
