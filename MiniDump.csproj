@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netcoreapp2.0;netcoreapp2.1;netcoreapp2.2;netcoreapp3.0;netcoreapp3.1;net45;net451;net452;net46;net461;net462;net47;net471;net472;net48</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;netcoreapp2.0;netcoreapp2.1;netcoreapp2.2;netcoreapp3.0;netcoreapp3.1;net45;net451;net452;net46;net461;net462;net47;net471;net472;net48</TargetFrameworks>
     <AssemblyName>MiniDump</AssemblyName>
     <LangVersion>latest</LangVersion>
     <Company>Els_kom org.</Company>
@@ -11,10 +11,11 @@
     <RepositoryUrl>https://github.com/Elskom/MiniDump/</RepositoryUrl>
     <PackageProjectUrl>https://github.com/Elskom/MiniDump/</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Copyright>Copyright (c) 2018-2019</Copyright>
+    <Copyright>Copyright (c) 2018-2020</Copyright>
     <Description>A c# library that handles mini-dumping a program by adding the "[MiniDump(...)]" attribute to the application's main class.</Description>
     <PackageReleaseNotes>Added reference assemblies.</PackageReleaseNotes>
     <Version>1.0.3</Version>
+    <Version Condition="'$(GITHUB_ACTIONS)' == 'true' AND !$(GITHUB_REF.StartsWith('refs/tags/'))">$(Version)-preview-$(GITHUB_RUN_ID)</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <NoWarn>$(NoWarn);NU5104;NU5118</NoWarn>
@@ -28,6 +29,8 @@
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <!-- Optional: Build symbol package (.snupkg) to distribute the PDB containing Source Link -->
     <IncludeSymbols>true</IncludeSymbols>
+    <!-- Optional: Include source code in the symbol package (.snupkg) -->
+    <IncludeSource>true</IncludeSource>
     <IncludeBuildOutput>true</IncludeBuildOutput>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
@@ -36,14 +39,14 @@
     <DefineConstants>$(DefineConstants);DEBUG;TRACE</DefineConstants>
     <OutputPath>bin\Any CPU\Debug\</OutputPath>
     <DocumentationFile>bin\Any CPU\Debug\MiniDump.xml</DocumentationFile>
-    <DebugType>full</DebugType>
+    <DebugType>portable</DebugType>
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <OutputPath>bin\Any CPU\Release\</OutputPath>
     <DocumentationFile>bin\Any CPU\Release\MiniDump.xml</DocumentationFile>
-    <DebugType>full</DebugType>
+    <DebugType>portable</DebugType>
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
 
@@ -54,15 +57,13 @@
   <ItemGroup>
     <None Remove=".git" />
     <None Remove=".gitignore" />
-    <None Remove="appveyor.yml" />
-    <None Remove="azure-pipelines.yml" />
     <None Remove="LICENSE" />
     <None Remove="readme.md" />
     <None Remove="stylecop.json" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="GitBuildInfo" Version="0.24.0">
+    <PackageReference Include="GitBuildInfo" Version="0.25.0-preview-97596234">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
@@ -70,11 +71,11 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.0.0">
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.0-beta1.20255.4">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="IDisposableAnalyzers" Version="3.3.7">
+    <PackageReference Include="IDisposableAnalyzers" Version="3.3.8">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
@@ -98,23 +99,23 @@
     <AdditionalFiles Include="stylecop.json" />
   </ItemGroup>
 
-  <ItemGroup Condition="Exists('..\GitInformation\src\GitInformation\AraHaan.GitInformation.csproj')">
+  <ItemGroup Condition="Exists('..\GitInformation\src\GitInformation\AraHaan.GitInformation.csproj') AND '$(SolutionName)' == 'build_all_packages'">
     <ProjectReference Include="..\GitInformation\src\GitInformation\AraHaan.GitInformation.csproj" />
   </ItemGroup>
 
-  <ItemGroup Condition="!Exists('..\GitInformation\src\GitInformation\AraHaan.GitInformation.csproj')">
+  <ItemGroup Condition="!Exists('..\GitInformation\src\GitInformation\AraHaan.GitInformation.csproj') OR '$(SolutionName)' != 'build_all_packages'">
     <PackageReference Include="AraHaan.GitInformation">
-      <Version>1.0.1</Version>
+      <Version>1.0.2-preview-97608530</Version>
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup Condition="Exists('../SettingsFile/SettingsFile.csproj')">
+  <ItemGroup Condition="Exists('../SettingsFile/SettingsFile.csproj') AND '$(SolutionName)' == 'build_all_packages'">
     <ProjectReference Include="../SettingsFile/SettingsFile.csproj" />
   </ItemGroup>
 
-  <ItemGroup Condition="!Exists('../SettingsFile/SettingsFile.csproj')">
+  <ItemGroup Condition="!Exists('../SettingsFile/SettingsFile.csproj') OR '$(SolutionName)' != 'build_all_packages'">
     <PackageReference Include="SettingsFile">
-      <Version>1.0.3</Version>
+      <Version>1.0.4-preview-97661487</Version>
     </PackageReference>
   </ItemGroup>
 
