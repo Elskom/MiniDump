@@ -115,7 +115,7 @@
 
   <ItemGroup Condition="!Exists('../SettingsFile/SettingsFile.csproj') OR '$(SolutionName)' != 'build_all_packages'">
     <PackageReference Include="SettingsFile">
-      <Version>1.0.4-preview-98018122</Version>
+      <Version>1.0.4-preview-99629310</Version>
     </PackageReference>
   </ItemGroup>
 
