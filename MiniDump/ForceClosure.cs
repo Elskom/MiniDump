@@ -18,6 +18,6 @@ namespace Elskom.Generic.Libs
         /// <summary>
         /// Gets a value indicating whether the application should force close.
         /// </summary>
-        public static bool ForceClose { get; internal set; } = false;
+        public static bool ForceClose { get; internal set; }
     }
 }
