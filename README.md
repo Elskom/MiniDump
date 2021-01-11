@@ -6,3 +6,5 @@
 ![Build Status](https://github.com/Elskom/MiniDump/workflows/.NET%20Core%20%28build20pull%20request%29/badge.svg)
 
 A c# library that handles mini-dumping a program by adding the ``[MiniDump(...)]`` attribute to the application's main class.
+
+MOVED TO https://github.com/Elskom/Sdk/
